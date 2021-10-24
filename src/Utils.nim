@@ -1,6 +1,26 @@
 import gintro/[gtk4, gobject, gio, adw]
 import std/with
 
+
+proc newOutlineBtn*(text: string = ""): Button = 
+  result = newButton(text)
+  result.valign = Align.center
+  result.addCssClass("outline")
+
+proc newOutlineBtnWithIcon*(iconName: string = ""): Button = 
+  result = newButtonFromIconName(iconName)
+  result.valign = Align.center
+  result.addCssClass("outline")
+
+proc createLinkedBox*(widgets: seq[Widget]): Box = 
+  result = newBox(Orientation.horizontal)
+  result.addCssClass("linked")
+  for index in widgets:
+    result.append index
+    
+
+
+
 proc setWidgetToEnd*(widget: Widget) = 
   with widget: 
     halign = Align.end
@@ -23,7 +43,7 @@ proc createBoxWithEntryAndBtn*(entry: Entry, btn: Button): Box =
   
   entry.setWidgetToStart()
   btn.setWidgetToEnd()
-  
+
   result = box
   
 

@@ -10,11 +10,9 @@ proc activate(app: gtk4.Application) =
     window = adw.newPreferencesWindow()
 
   with window:
-    # child = mainBox
     add createPage(window)
-    # add createPage1()
     title = "Main"
-    defaultSize = (100, 100)
+    defaultSize = (100, 400)
     show
 
 proc main() =

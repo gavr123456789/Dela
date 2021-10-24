@@ -31,8 +31,8 @@ proc createPage*(prefWindow: PreferencesWindow): PreferencesPage =
     entryPageName = newEntry()
     entryGroupName = newEntry()
 
-    addNewPageBtn = newButton("Add Page")
-    addNewGroupBtn = newButton("Add Group")
+    addNewPageBtn = newOutlineBtn("Add Page")
+    addNewGroupBtn = newOutlineBtn("Add Group")
     
     box1 = createBoxWithEntryAndBtn(entryPageName, addNewPageBtn)
     box2 = createBoxWithEntryAndBtn(entryGroupName, addNewGroupBtn)

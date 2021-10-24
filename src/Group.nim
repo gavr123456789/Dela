@@ -8,9 +8,6 @@ type
     entry: Entry
 
 
-
-
-
 proc addGroup*(page: PreferencesPage, title: string) = 
   let 
     group = newPreferencesGroup()
