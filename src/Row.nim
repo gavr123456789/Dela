@@ -55,6 +55,8 @@ proc createTaskRow*(title: string): Row =
   let 
     row = newExpanderRow(Row)
     playPauseBtn = newOutlineBtnWithIcon(PLAYICON)
+    textView = newTextView()
+
   row.label = newLabel("0")
   let  
     box = playBtnWithTime(playPauseBtn, row.label)
@@ -65,6 +67,7 @@ proc createTaskRow*(title: string): Row =
 
   
   row.addPrefix box
+  row.add textView
   playPauseBtn.connect("clicked", playPauseClicked, row)
 
   row.title = title
@@ -83,7 +86,9 @@ proc createRowThatAddNewTasks*(group: PreferencesGroup): PreferencesRow =
     addRowBtn = newButton("Add Task")
     box = createBoxWithEntryAndBtn(entryTaskName, addRowBtn)
 
+  addRowBtn.addCssClass("outline")
   addRowBtn.connect("clicked", addGroupBtnClicked, (group, entryTaskName))
+
 
   row.child = box
   
