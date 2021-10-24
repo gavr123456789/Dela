@@ -26,6 +26,7 @@ proc updateGUI*(row: Row): bool =
     echo row.label.text
     return SOURCE_CONTINUE
   else:
+    row.time -= 1
     return SOURCE_REMOVE
 
 
