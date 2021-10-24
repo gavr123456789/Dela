@@ -24,10 +24,12 @@ proc buttonClicked(button: Button) =
 proc activate(app: gtk4.Application) =
   let
     window = newApplicationWindow(app)
-  
+    
+    
   button = newButton("Click Me")
   button.connect("clicked",  buttonClicked)
-    
+  
+
   with window:
     title = "Countdown"
     defaultSize = (250, 50)
