@@ -21,3 +21,6 @@ proc addGroup*(page: PreferencesPage, title: string) =
 
 proc addGroupBtnClicked*(btn: Button, data: AddGroupData) = 
   addGroup(data.page, data.entry.text)
+
+proc addGroupEntryActivated*(entry: Entry, data: AddGroupData) = 
+  addGroup(data.page, data.entry.text)

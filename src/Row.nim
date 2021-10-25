@@ -2,14 +2,18 @@ import gintro/[gtk4, gobject, gio, pango, adw, glib]
 import std/with
 import Utils
 
-const PLAYICON = "media-playback-start-symbolic"
-const PAUSEICON = "media-playback-pause-symbolic"
+const
+  PLAYICON = "media-playback-start-symbolic"
+  PAUSEICON = "media-playback-pause-symbolic"
+  DOUBLECLICICON ="dino-double-tick-symbolic"
 
 type 
   Row* = ref object of ExpanderRow
     isPlaying*: bool
     time*: int
     label*: Label
+    done: bool
+    playPauseBtn: Button
 
 type
   AddRowData* = tuple
@@ -61,19 +65,16 @@ proc createRevealerWithEntry*(row: Row): Box =
 
   with newTabNameReveal:
     child = tabNameEntry
-    hexpand = true
+    # hexpand = true
     transitionType = RevealerTransitionType.swingRight
 
   
   revealBtnSetTaskName.connect("clicked", openRevealer, (newTabNameReveal, tabNameEntry)) # tabNameEntry
-  # revealBtnSetTaskName.addCssClass "flat"
-  # tabNameEntry.hexpand = true
   tabNameEntry.connect("activate", setTaskName, (newTabNameReveal, row))
 
   result = mainBox
 
 ### ROW
-
 
 proc updateGUI*(row: Row): bool =
   row.time.inc()
@@ -98,7 +99,7 @@ proc playPauseClicked(btn: Button, row: Row) =
 
   else:
     btn.iconName = PLAYICON
-
+  
 
   echo "isPlaying = ", row.isPlaying
   
@@ -111,8 +112,22 @@ proc playBtnWithTime(playBtn: Button, time: Label): Box =
   result.append time
   # result.addCssClass "linked"
 
-# proc addTagToTask(entry: Entry, taskEntry: Entry) = 
+# proc addTagToTask(entry: Entry) = 
+#   entry.buffer.
 #   discard
+proc doneTaskClicked(btn: Button, row: Row) = 
+  if row.isPlaying: return
+  row.done = not row.done
+
+  if row.done:
+    row.opacity = 0.6
+    row.playPauseBtn.iconName = DOUBLECLICICON
+    row.playPauseBtn.sensitive = false
+  
+  else:
+    row.opacity = 1
+    row.playPauseBtn.iconName = PLAYICON
+    row.playPauseBtn.sensitive = true
 
 proc createTaskRow*(title: string, group: PreferencesGroup): Row = 
   let 
@@ -133,12 +148,12 @@ proc createTaskRow*(title: string, group: PreferencesGroup): Row =
     # addTagBox = newBox(Orientation.horizontal, 0)
     # tabNameEntry = newEntry()
 
-  # tabNameEntry.connect("activate", addTagToTask, )
-
+  # tabNameEntry.connect("activate", addTagToTask)
+  row.playPauseBtn = playPauseBtn
   with doneDeleteEditBox:
     append doneTaskBtn
-    append deleteTaskFooterBtn
     append editNameBtn
+    append deleteTaskFooterBtn
     # append editTaskFooterBtn
   
   doneDeleteEditBox.addCssClass "linked"
@@ -152,23 +167,44 @@ proc createTaskRow*(title: string, group: PreferencesGroup): Row =
   row.add footerBox
   playPauseBtn.connect("clicked", playPauseClicked, row)
   deleteTaskFooterBtn.connect("clicked", removeRowClicked, (group, row))
+  doneTaskBtn.connect("clicked", doneTaskClicked, row)
   row.title = title
   result = row
 
 
 
-proc addGroupBtnClicked(btn: Button, data: AddRowData) = 
+proc addTaskBtnClicked(btn: Button, data: AddRowData) = 
+  if data.entry.text == "": return
   let taskRow = createTaskRow(data.entry.text, data.group)
   data.group.add taskRow
 
+proc addTaskActionRowActivated(row: ActionRow, data: AddRowData) = 
+  echo "sas"
+  if data.entry.text == "": return
+  let taskRow = createTaskRow(data.entry.text, data.group)
+  data.group.add taskRow
+
+proc addTaskEntryActivated(entry: Entry, data: AddRowData) = 
+  if data.entry.text == "": return
+  let taskRow = createTaskRow(data.entry.text, data.group)
+  data.group.add taskRow
+
+# proc sas(btn: Button) = 
+#   echo "qwe"
+
 proc createRowThatAddNewTasks*(group: PreferencesGroup): PreferencesRow = 
   let 
-    row = newPreferencesRow()
+    row = newActionRow()
     entryTaskName = newEntry()
     addRowBtn = newFlatBtnWithIcon("list-add-symbolic")
+    addRowBtn2 = newFlatBtnWithIcon("list-add-symbolic")
     box = createBoxWithEntryAndBtn(entryTaskName, addRowBtn)
 
-  addRowBtn.connect("clicked", addGroupBtnClicked, (group, entryTaskName))
+  row.activatableWidget = addRowBtn2
+  row.connect("activated", addTaskActionRowActivated,  (group, entryTaskName))
+  addRowBtn.connect("clicked", addTaskBtnClicked, (group, entryTaskName))
+  entryTaskName.connect("activate", addTaskEntryActivated, (group, entryTaskName))
+  # addRowBtn2.connect("clicked", sas)
   box.homogeneous = true
 
   row.child = box

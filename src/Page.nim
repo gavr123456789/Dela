@@ -14,24 +14,28 @@ proc createPage2*(): PreferencesPage =
   let
       page = newPreferencesPage()
       group = newPreferencesGroup()
-      rowAddGroup = newPreferencesRow()
+      rowAddGroup = newActionRow()
       entryGroupName = newEntry()
       addNewGroupBtn = newFlatBtnWithIcon("list-add-symbolic")
-      box2 = createBoxWithEntryAndBtn(entryGroupName, addNewGroupBtn)
+      box = createBoxWithEntryAndBtn(entryGroupName, addNewGroupBtn)
 
   addNewGroupBtn.connect("clicked", addGroupBtnClicked, (page, entryGroupName))
+  entryGroupName.connect("activate", addGroupEntryActivated, (page, entryGroupName))
     
-  box2.homogeneous = true
-  rowAddGroup.child = box2
+  box.homogeneous = true
 
-  page.add group
+  with rowAddGroup:
+    child = box
+    activatableWidget = addNewGroupBtn
+
+  with group:
+    add rowAddGroup
 
   with page:
     name = "2"
     iconName = "emblem-flag-purple-symbolic"
     title = "main"
-
-  with group:
-    add rowAddGroup
+    add group
+  
     
   result = page
