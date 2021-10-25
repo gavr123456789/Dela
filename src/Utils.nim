@@ -7,6 +7,12 @@ proc newOutlineBtn*(text: string = ""): Button =
   result.valign = Align.center
   result.addCssClass("outline")
 
+
+proc newFlatBtnWithIcon*(iconName: string = ""): Button = 
+  result = newButtonFromIconName(iconName)
+  result.valign = Align.center
+  result.addCssClass("flat")
+
 proc newOutlineBtnWithIcon*(iconName: string = ""): Button = 
   result = newButtonFromIconName(iconName)
   result.valign = Align.center

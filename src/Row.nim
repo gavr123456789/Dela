@@ -7,13 +7,72 @@ const PAUSEICON = "media-playback-pause-symbolic"
 
 type 
   Row* = ref object of ExpanderRow
-    isPlaying: bool
-    time: int
-    label: Label
+    isPlaying*: bool
+    time*: int
+    label*: Label
 
+type
   AddRowData* = tuple
     group: PreferencesGroup
     entry: Entry
+  RemoveRowData = tuple
+    group: PreferencesGroup
+    row: Row
+  
+
+### EntryRevealer 
+
+type 
+  RevealerAndEntry = tuple
+    revealer: Revealer
+    entry: Entry
+  Data = tuple
+    revealer: Revealer
+    row: Row
+  
+
+proc setTaskName(entry: Entry, data: Data) = 
+  echo entry.text.len
+  if entry.text.len == 0:
+    data.revealer.revealChild = false
+    return
+
+  data.row.title = entry.text
+    
+  data.revealer.revealChild = false
+  entry.text = ""
+
+
+proc openRevealer(self: Button, revealerAndEntry: RevealerAndEntry) =
+  revealerAndEntry.revealer.revealChild = not revealerAndEntry.revealer.revealChild
+  if revealerAndEntry.revealer.revealChild:
+    discard revealerAndEntry.entry.grabFocus()
+
+proc createRevealerWithEntry*(row: Row): Box =
+  let
+    mainBox = newBox(Orientation.horizontal, 3)
+    revealBtnSetTaskName = newFlatBtnWithIcon("document-edit-symbolic")
+    newTabNameReveal = newRevealer()
+    tabNameEntry = newEntry()
+
+  with mainBox: 
+    append revealBtnSetTaskName
+    append newTabNameReveal
+
+  with newTabNameReveal:
+    child = tabNameEntry
+    hexpand = true
+    transitionType = RevealerTransitionType.swingRight
+
+  
+  revealBtnSetTaskName.connect("clicked", openRevealer, (newTabNameReveal, tabNameEntry)) # tabNameEntry
+  # revealBtnSetTaskName.addCssClass "flat"
+  # tabNameEntry.hexpand = true
+  tabNameEntry.connect("activate", setTaskName, (newTabNameReveal, row))
+
+  result = mainBox
+
+### ROW
 
 
 proc updateGUI*(row: Row): bool =
@@ -43,6 +102,8 @@ proc playPauseClicked(btn: Button, row: Row) =
 
   echo "isPlaying = ", row.isPlaying
   
+proc removeRowClicked(btn: Button, data: RemoveRowData) = 
+  data.group.remove data.row
 
 proc playBtnWithTime(playBtn: Button, time: Label): Box = 
   result = newBox(Orientation.horizontal, 10)
@@ -51,7 +112,7 @@ proc playBtnWithTime(playBtn: Button, time: Label): Box =
   # result.addCssClass "linked"
 
 
-proc createTaskRow*(title: string): Row = 
+proc createTaskRow*(title: string, group: PreferencesGroup): Row = 
   let 
     row = newExpanderRow(Row)
     playPauseBtn = newOutlineBtnWithIcon(PLAYICON)
@@ -59,36 +120,52 @@ proc createTaskRow*(title: string): Row =
 
   row.label = newLabel("0")
   let  
-    box = playBtnWithTime(playPauseBtn, row.label)
-    # stopBtn = newButton("Stop")
-    # deleteTaskBtn = newButton("Delete")
-    # doneTaskBtn = newButton("Done")
+    playBtnWithTimeBox = playBtnWithTime(playPauseBtn, row.label)
+    # stopBtn = newOutlineBtnWithIcon("close-symbolic")
+    deleteTaskFooterBtn =  newFlatBtnWithIcon("close-symbolic")
+    # editTaskFooterBtn =  newFlatBtnWithIcon("document-edit-symbolic")
+    doneTaskBtn = newFlatBtnWithIcon("dino-tick-symbolic")
     # mainBox = newBox(Orientation.horizontal, 0)  
+    footerBox = newBox(Orientation.vertical, 0)  
+    doneDeleteEditBox = newBox(Orientation.horizontal, 0)  
+    editNameFooter = createRevealerWithEntry(row)
 
+
+  with doneDeleteEditBox:
+    append doneTaskBtn
+    append deleteTaskFooterBtn
+    append editNameFooter
+    # append editTaskFooterBtn
   
-  row.addPrefix box
-  row.add textView
-  playPauseBtn.connect("clicked", playPauseClicked, row)
+  doneDeleteEditBox.addCssClass "linked"
+  deleteTaskFooterBtn.addCssClass "destructive-action"
 
+  with footerBox: 
+    append doneDeleteEditBox
+    append textView
+    
+  row.addPrefix playBtnWithTimeBox
+  row.add footerBox
+  playPauseBtn.connect("clicked", playPauseClicked, row)
+  deleteTaskFooterBtn.connect("clicked", removeRowClicked, (group, row))
   row.title = title
   result = row
 
 
 
 proc addGroupBtnClicked(btn: Button, data: AddRowData) = 
-  let taskRow = createTaskRow(data.entry.text)
+  let taskRow = createTaskRow(data.entry.text, data.group)
   data.group.add taskRow
 
 proc createRowThatAddNewTasks*(group: PreferencesGroup): PreferencesRow = 
   let 
     row = newPreferencesRow()
     entryTaskName = newEntry()
-    addRowBtn = newButton("Add Task")
+    addRowBtn = newFlatBtnWithIcon("list-add-symbolic")
     box = createBoxWithEntryAndBtn(entryTaskName, addRowBtn)
 
-  addRowBtn.addCssClass("outline")
   addRowBtn.connect("clicked", addGroupBtnClicked, (group, entryTaskName))
-
+  box.homogeneous = true
 
   row.child = box
   

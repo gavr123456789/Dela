@@ -29,10 +29,7 @@ proc openFileEntry(self: Button, revealerAndEntry: RevealerAndEntry) =
   if revealerAndEntry.revealer.revealChild:
     discard revealerAndEntry.entry.grabFocus()
 
-# proc createFile(self: Button, folderNameEntry: gtk4.Entry) =
-
-
-proc createRevealerWithEntry*(header: adw.HeaderBar, tabView: TabView) =
+proc addRevealerWithEntryToHeaderBar*(header: adw.HeaderBar, tabView: TabView) =
   let
     headerButtonsBox = newBox(Orientation.horizontal, 3)
     revealBtnSetTabName = newButtonFromIconName("document-new-symbolic")
@@ -46,7 +43,7 @@ proc createRevealerWithEntry*(header: adw.HeaderBar, tabView: TabView) =
   with newTabNameReveal:
     child = tabNameEntry
     hexpand = true
-    transitionType = RevealerTransitionType.slideLeft
+    transitionType = RevealerTransitionType.swingRight
 
   with header: 
     packStart headerButtonsBox
@@ -56,6 +53,3 @@ proc createRevealerWithEntry*(header: adw.HeaderBar, tabView: TabView) =
 
   tabNameEntry.hexpand = true
   tabNameEntry.connect("activate", createTab, (newTabNameReveal, tabView))
-  
-
-  # result.child = centerBox

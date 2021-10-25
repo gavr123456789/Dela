@@ -26,24 +26,17 @@ proc createPage2*(): PreferencesPage =
   let
       page = newPreferencesPage()
       group = newPreferencesGroup()
-      rowAddPage = newPreferencesRow()
       rowAddGroup = newPreferencesRow()
 
-      entryPageName = newEntry()
       entryGroupName = newEntry()
 
-      addNewPageBtn = newOutlineBtn("Add Page")
-      addNewGroupBtn = newOutlineBtn("Add Group")
+      addNewGroupBtn = newFlatBtnWithIcon("list-add-symbolic")
       
-      box1 = createBoxWithEntryAndBtn(entryPageName, addNewPageBtn)
       box2 = createBoxWithEntryAndBtn(entryGroupName, addNewGroupBtn)
 
   addNewGroupBtn.connect("clicked", addGroupBtnClicked, (page, entryGroupName))
     
-  box1.homogeneous = true
   box2.homogeneous = true
-
-  rowAddPage.child = box1
   rowAddGroup.child = box2
 
   page.add group
@@ -54,7 +47,6 @@ proc createPage2*(): PreferencesPage =
     title = "main"
 
   with group:
-    add rowAddPage
     add rowAddGroup
     
   result = page
