@@ -3,7 +3,6 @@ import std/with
 import Page
 import AddNewPageRevealer
 
-
 proc addNewPage(btn: Button, tabView: TabView) = 
   let page = tabView.append newLabel($tabView.nPages)
   page.title = $tabView.nPages
@@ -22,24 +21,15 @@ proc activate(app: gtk4.Application) =
 
     tabView = newTabView()
     taskPage1 = createPage2()
-    taskPage2 = createPage2()
-
-
 
   # add addPageBtn to header
-  # header.packStart addNewPageBtn
   addRevealerWithEntryToHeaderBar(header, tabView)
 
   let page1 = tabView.append taskPage1
   page1.title = "Main"
-  let page2 = tabView.append taskPage2
-  page2.title = "page 2"
 
 
   tabBar.view = tabView
-  # tabBar.endActionWidget = addNewPageBtn
-  # let data: Data = (tabView, newLabel("page Num " & $tabView.nPages)) 
-
   addNewPageBtn.connect("clicked", addNewPage, tabView)
 
   with mainBox: 

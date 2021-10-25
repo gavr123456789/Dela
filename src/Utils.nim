@@ -23,8 +23,6 @@ proc createLinkedBox*(widgets: seq[Widget]): Box =
   result.addCssClass("linked")
   for index in widgets:
     result.append index
-    
-
 
 
 proc setWidgetToEnd*(widget: Widget) = 

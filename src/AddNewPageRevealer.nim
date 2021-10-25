@@ -1,7 +1,7 @@
 import gintro/[gtk4, gobject, gio, pango, adw]
 import std/with
 import Page
-
+import Utils
 type 
   RevealerAndEntry = tuple
     revealer: Revealer
@@ -32,7 +32,7 @@ proc openFileEntry(self: Button, revealerAndEntry: RevealerAndEntry) =
 proc addRevealerWithEntryToHeaderBar*(header: adw.HeaderBar, tabView: TabView) =
   let
     headerButtonsBox = newBox(Orientation.horizontal, 3)
-    revealBtnSetTabName = newButtonFromIconName("document-new-symbolic")
+    revealBtnSetTabName = newFlatBtnWithIcon("document-new-symbolic")
     newTabNameReveal = newRevealer()
     tabNameEntry = newEntry()
 

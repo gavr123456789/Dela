@@ -111,6 +111,8 @@ proc playBtnWithTime(playBtn: Button, time: Label): Box =
   result.append time
   # result.addCssClass "linked"
 
+# proc addTagToTask(entry: Entry, taskEntry: Entry) = 
+#   discard
 
 proc createTaskRow*(title: string, group: PreferencesGroup): Row = 
   let 
@@ -121,20 +123,22 @@ proc createTaskRow*(title: string, group: PreferencesGroup): Row =
   row.label = newLabel("0")
   let  
     playBtnWithTimeBox = playBtnWithTime(playPauseBtn, row.label)
-    # stopBtn = newOutlineBtnWithIcon("close-symbolic")
-    deleteTaskFooterBtn =  newFlatBtnWithIcon("close-symbolic")
-    # editTaskFooterBtn =  newFlatBtnWithIcon("document-edit-symbolic")
-    doneTaskBtn = newFlatBtnWithIcon("dino-tick-symbolic")
-    # mainBox = newBox(Orientation.horizontal, 0)  
+    # FOOTER
     footerBox = newBox(Orientation.vertical, 0)  
+    deleteTaskFooterBtn =  newFlatBtnWithIcon("close-symbolic")
+    doneTaskBtn = newFlatBtnWithIcon("dino-tick-symbolic") # TODO при нажатии превращается в undone и делает opacity 06
     doneDeleteEditBox = newBox(Orientation.horizontal, 0)  
-    editNameFooter = createRevealerWithEntry(row)
+    editNameBtn = createRevealerWithEntry(row)
 
+    # addTagBox = newBox(Orientation.horizontal, 0)
+    # tabNameEntry = newEntry()
+
+  # tabNameEntry.connect("activate", addTagToTask, )
 
   with doneDeleteEditBox:
     append doneTaskBtn
     append deleteTaskFooterBtn
-    append editNameFooter
+    append editNameBtn
     # append editTaskFooterBtn
   
   doneDeleteEditBox.addCssClass "linked"

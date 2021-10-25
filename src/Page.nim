@@ -3,23 +3,11 @@ import std/with
 import Group
 import Utils
 
-# proc createPage*(prefWindow: PreferencesWindow): PreferencesPage;
-
 type 
-
   Task* = object
     name: string
     timeStarted: int
     fullTime: int
-  Sas = tuple
-    prefWin: PreferencesWindow
-    entry: Entry
-
-# proc addPageBtnClicked(btn: Button, data: Sas) = 
-#   let qwe = createPage(data.prefWin)
-#   qwe.title = data.entry.text
-#   data.prefWin.add qwe
-
 
 
 proc createPage2*(): PreferencesPage = 
@@ -27,11 +15,8 @@ proc createPage2*(): PreferencesPage =
       page = newPreferencesPage()
       group = newPreferencesGroup()
       rowAddGroup = newPreferencesRow()
-
       entryGroupName = newEntry()
-
       addNewGroupBtn = newFlatBtnWithIcon("list-add-symbolic")
-      
       box2 = createBoxWithEntryAndBtn(entryGroupName, addNewGroupBtn)
 
   addNewGroupBtn.connect("clicked", addGroupBtnClicked, (page, entryGroupName))
@@ -50,24 +35,3 @@ proc createPage2*(): PreferencesPage =
     add rowAddGroup
     
   result = page
-
-# proc createSelectPageName(): Clamp = 
-#   result = newClamp()
-#   result.maximumSize = 600
-
-
-
-
-# proc createNewStuckPage(): Stack =
-#   let
-#     stack = newStack()
-#     clamp = newClamp()
-#     taskPage = createPage2()
-#     tabNameEntry = newEntry()
-  
-#   clamp.maximumSize = 600
-#   clamp.child = tabNameEntry
-
-#   let stackPage1 = stack.addNamed(clamp, "1")
-#   let stackPage2 = stack.addNamed(taskPage, "2")
-#   result = stack
