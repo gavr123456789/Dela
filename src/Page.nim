@@ -21,7 +21,7 @@ proc createPage2*(): PreferencesPage =
 
   addNewGroupBtn.connect("clicked", addGroupBtnClicked, (page, entryGroupName))
   entryGroupName.connect("activate", addGroupEntryActivated, (page, entryGroupName))
-    
+
   box.homogeneous = true
 
   with rowAddGroup:

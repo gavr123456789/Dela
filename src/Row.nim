@@ -173,40 +173,13 @@ proc createTaskRow*(title: string, group: PreferencesGroup): Row =
 
 
 
-proc addTaskBtnClicked(btn: Button, data: AddRowData) = 
-  if data.entry.text == "": return
-  let taskRow = createTaskRow(data.entry.text, data.group)
-  data.group.add taskRow
 
-proc addTaskActionRowActivated(row: ActionRow, data: AddRowData) = 
-  echo "sas"
-  if data.entry.text == "": return
-  let taskRow = createTaskRow(data.entry.text, data.group)
-  data.group.add taskRow
 
-proc addTaskEntryActivated(entry: Entry, data: AddRowData) = 
-  if data.entry.text == "": return
-  let taskRow = createTaskRow(data.entry.text, data.group)
-  data.group.add taskRow
 
-# proc sas(btn: Button) = 
-#   echo "qwe"
+# proc addTaskActionRowActivated(row: ActionRow, data: AddRowData) = 
+#   echo "sas"
+#   if data.entry.text == "": return
+#   let taskRow = createTaskRow(data.entry.text, data.group)
+#   data.group.add taskRow
 
-proc createRowThatAddNewTasks*(group: PreferencesGroup): PreferencesRow = 
-  let 
-    row = newActionRow()
-    entryTaskName = newEntry()
-    addRowBtn = newFlatBtnWithIcon("list-add-symbolic")
-    # addRowBtn2 = newFlatBtnWithIcon("list-add-symbolic")
-    box = createBoxWithEntryAndBtn(entryTaskName, addRowBtn)
 
-  # row.activatableWidget = addRowBtn2
-  # row.connect("activated", addTaskActionRowActivated,  (group, entryTaskName))
-  addRowBtn.connect("clicked", addTaskBtnClicked, (group, entryTaskName))
-  entryTaskName.connect("activate", addTaskEntryActivated, (group, entryTaskName))
-  # addRowBtn2.connect("clicked", sas)
-  box.homogeneous = true
-
-  row.child = box
-  
-  result = row
