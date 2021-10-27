@@ -147,7 +147,7 @@ proc createTaskRow*(title: string, group: PreferencesGroup): Row =
 
     # addTagBox = newBox(Orientation.horizontal, 0)
     # tabNameEntry = newEntry()
-
+  textView.wrapMode = gtk4.WrapMode.word
   # tabNameEntry.connect("activate", addTagToTask)
   row.playPauseBtn = playPauseBtn
   with doneDeleteEditBox:
