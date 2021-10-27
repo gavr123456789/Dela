@@ -197,11 +197,11 @@ proc createRowThatAddNewTasks*(group: PreferencesGroup): PreferencesRow =
     row = newActionRow()
     entryTaskName = newEntry()
     addRowBtn = newFlatBtnWithIcon("list-add-symbolic")
-    addRowBtn2 = newFlatBtnWithIcon("list-add-symbolic")
+    # addRowBtn2 = newFlatBtnWithIcon("list-add-symbolic")
     box = createBoxWithEntryAndBtn(entryTaskName, addRowBtn)
 
-  row.activatableWidget = addRowBtn2
-  row.connect("activated", addTaskActionRowActivated,  (group, entryTaskName))
+  # row.activatableWidget = addRowBtn2
+  # row.connect("activated", addTaskActionRowActivated,  (group, entryTaskName))
   addRowBtn.connect("clicked", addTaskBtnClicked, (group, entryTaskName))
   entryTaskName.connect("activate", addTaskEntryActivated, (group, entryTaskName))
   # addRowBtn2.connect("clicked", sas)
