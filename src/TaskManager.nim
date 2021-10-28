@@ -24,7 +24,10 @@ proc activate(app: gtk4.Application) =
 
   # add addPageBtn to header
   addRevealerWithEntryToHeaderBar(header, tabView)
-
+  with taskPage1: 
+    vexpand = true
+    hexpand = true
+  
   let page1 = tabView.append taskPage1
   page1.title = "Main"
 

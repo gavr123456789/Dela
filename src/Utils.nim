@@ -63,5 +63,3 @@ proc createBoxWithEntryAndBtns*(entry: Entry, addBtn, delGroupBtn: Button): Box 
 
   result = box
   
-
-

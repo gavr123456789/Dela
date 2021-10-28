@@ -182,4 +182,12 @@ proc createTaskRow*(title: string, group: PreferencesGroup): Row =
 #   let taskRow = createTaskRow(data.entry.text, data.group)
 #   data.group.add taskRow
 
+import std/json
+
+
+
+func saveRowToJson(row: Row): auto =
+  let qwe = %* {"name": row.label.text}
+
+  return row
 
