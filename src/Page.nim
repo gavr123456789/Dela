@@ -26,7 +26,7 @@ proc createPage2*(): PreferencesPage =
 
   with rowAddGroup:
     child = box
-    activatableWidget = addNewGroupBtn
+    # activatableWidget = addNewGroupBtn
 
   with group:
     add rowAddGroup
