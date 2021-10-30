@@ -2,10 +2,8 @@ import gintro/[gtk4, gobject, gio, pango, adw]
 import std/with
 import Page
 import Utils
+
 type 
-  RevealerAndEntry = tuple
-    revealer: Revealer
-    entry: Entry
   Data = tuple
     revealer: Revealer
     tabView: TabView

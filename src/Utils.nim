@@ -53,13 +53,52 @@ proc createBoxWithEntryAndBtn*(entry: Entry, addBtn: Button): Box =
 proc createBoxWithEntryAndBtns*(entry: Entry, addBtn, delGroupBtn: Button): Box = 
   let box = newBox(Orientation.horizontal, 5)
   with box: 
-    append entry
     append addBtn
+    append entry
     append delGroupBtn
   
+  entry.hexpand = true
   entry.setWidgetToStart()
   addBtn.setWidgetToStart()
   delGroupBtn.setWidgetToEnd()
 
   result = box
   
+
+type 
+  RevealerWithButtonAndEntry* = tuple
+    button: Button
+    entry: Entry
+    box: Box
+  RevealerAndEntry* = tuple
+    revealer: Revealer
+    entry: Entry
+  
+proc openFileEntry(self: Button, revealerAndEntry: RevealerAndEntry) =
+  revealerAndEntry.revealer.revealChild = not revealerAndEntry.revealer.revealChild
+  if revealerAndEntry.revealer.revealChild:
+    discard revealerAndEntry.entry.grabFocus()
+
+
+proc createRevealerWithEntry*(iconName: string): RevealerWithButtonAndEntry =
+  let
+    headerButtonsBox = newBox(Orientation.horizontal, 3)
+    revealBtnSetTabName = newFlatBtnWithIcon(iconName)
+    newTabNameReveal = newRevealer()
+    tabNameEntry = newEntry()
+
+  with headerButtonsBox: 
+    append revealBtnSetTabName
+    append newTabNameReveal
+
+  with newTabNameReveal:
+    child = tabNameEntry
+    hexpand = true
+    transitionType = RevealerTransitionType.swingRight
+  
+  
+  revealBtnSetTabName.connect("clicked", openFileEntry, (newTabNameReveal, tabNameEntry)) # tabNameEntry
+
+  tabNameEntry.hexpand = true
+
+  result = (revealBtnSetTabName, tabNameEntry, headerButtonsBox)

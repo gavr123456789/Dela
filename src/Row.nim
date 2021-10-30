@@ -22,9 +22,6 @@ type
   RemoveRowData = tuple
     group: PreferencesGroup
     row: Row
-  
-
-### EntryRevealer 
 
 type 
   RevealerAndEntry = tuple
@@ -33,7 +30,7 @@ type
   Data = tuple
     revealer: Revealer
     row: Row
-  
+
 
 proc setTaskName(entry: Entry, data: Data) = 
   echo entry.text.len
@@ -42,7 +39,6 @@ proc setTaskName(entry: Entry, data: Data) =
     return
 
   data.row.title = entry.text
-    
   data.revealer.revealChild = false
   entry.text = ""
 
@@ -65,7 +61,6 @@ proc createRevealerWithEntry*(row: Row): Box =
 
   with newTabNameReveal:
     child = tabNameEntry
-    # hexpand = true
     transitionType = RevealerTransitionType.swingRight
 
   
@@ -75,7 +70,6 @@ proc createRevealerWithEntry*(row: Row): Box =
   result = mainBox
 
 ### ROW
-
 proc updateGUI*(row: Row): bool =
   row.time.inc()
   echo "updateGUIFromTime, sec: ", row.time
@@ -100,7 +94,6 @@ proc playPauseClicked(btn: Button, row: Row) =
   else:
     btn.iconName = PLAYICON
   
-
   echo "isPlaying = ", row.isPlaying
   
 proc removeRowClicked(btn: Button, data: RemoveRowData) = 
@@ -110,11 +103,8 @@ proc playBtnWithTime(playBtn: Button, time: Label): Box =
   result = newBox(Orientation.horizontal, 10)
   result.append playBtn
   result.append time
-  # result.addCssClass "linked"
 
-# proc addTagToTask(entry: Entry) = 
-#   entry.buffer.
-#   discard
+
 proc doneTaskClicked(btn: Button, row: Row) = 
   if row.isPlaying: return
   row.done = not row.done
@@ -129,6 +119,7 @@ proc doneTaskClicked(btn: Button, row: Row) =
     row.playPauseBtn.iconName = PLAYICON
     row.playPauseBtn.sensitive = true
 
+
 proc createTaskRow*(title: string, group: PreferencesGroup): Row = 
   let 
     row = newExpanderRow(Row)
@@ -138,23 +129,20 @@ proc createTaskRow*(title: string, group: PreferencesGroup): Row =
   row.label = newLabel("0")
   let  
     playBtnWithTimeBox = playBtnWithTime(playPauseBtn, row.label)
-    # FOOTER
-    footerBox = newBox(Orientation.vertical, 0)  
+
+    footerBox = newBox(Orientation.vertical, 0)
     deleteTaskFooterBtn =  newFlatBtnWithIcon("close-symbolic")
     doneTaskBtn = newFlatBtnWithIcon("dino-tick-symbolic") # TODO при нажатии превращается в undone и делает opacity 06
-    doneDeleteEditBox = newBox(Orientation.horizontal, 0)  
+    doneDeleteEditBox = newBox(Orientation.horizontal, 0)
     editNameBtn = createRevealerWithEntry(row)
 
-    # addTagBox = newBox(Orientation.horizontal, 0)
-    # tabNameEntry = newEntry()
   textView.wrapMode = gtk4.WrapMode.word
-  # tabNameEntry.connect("activate", addTagToTask)
   row.playPauseBtn = playPauseBtn
+
   with doneDeleteEditBox:
     append doneTaskBtn
     append editNameBtn
     append deleteTaskFooterBtn
-    # append editTaskFooterBtn
   
   doneDeleteEditBox.addCssClass "linked"
   deleteTaskFooterBtn.addCssClass "destructive-action"
@@ -172,20 +160,7 @@ proc createTaskRow*(title: string, group: PreferencesGroup): Row =
   result = row
 
 
-
-
-
-
-# proc addTaskActionRowActivated(row: ActionRow, data: AddRowData) = 
-#   echo "sas"
-#   if data.entry.text == "": return
-#   let taskRow = createTaskRow(data.entry.text, data.group)
-#   data.group.add taskRow
-
 import std/json
-
-
-
 func saveRowToJson(row: Row): auto =
   let qwe = %* {"name": row.label.text}
 

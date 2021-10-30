@@ -2,6 +2,7 @@ import gintro/[gtk4, gobject, gio, pango, adw]
 import std/with
 import Group
 import Utils
+import Types
 
 type 
   Task* = object
@@ -10,9 +11,10 @@ type
     fullTime: int
 
 
-proc createPage2*(): PreferencesPage = 
+
+proc createPage2*(): Page = 
   let
-      page = newPreferencesPage()
+      page = newPreferencesPage(Types.Page)
       group = newPreferencesGroup()
       rowAddGroup = newActionRow()
       entryGroupName = newEntry()
@@ -32,7 +34,7 @@ proc createPage2*(): PreferencesPage =
     add rowAddGroup
 
   with page:
-    name = "2"
+    name = "1"
     iconName = "emblem-flag-purple-symbolic"
     title = "main"
     add group

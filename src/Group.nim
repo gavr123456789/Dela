@@ -2,17 +2,16 @@ import gintro/[gtk4, gobject, gio, pango, adw]
 import std/with
 import Row
 import Utils
-
-proc addGroup*(page: PreferencesPage, title: string);
+import Types
+proc addGroup*(page: Page, title: string);
 
 type 
   AddGroupData* = tuple
-    page: PreferencesPage
+    page: Page
     entry: Entry
   RemoveGroupData* = tuple
-    page: PreferencesPage
+    page: Page
     group: PreferencesGroup
-
 
 
 proc addGroupBtnClicked*(btn: Button, data: AddGroupData) = 
@@ -24,45 +23,40 @@ proc addGroupEntryActivated*(entry: Entry, data: AddGroupData) =
 proc deleteGroupBtnClicked*(btn: Button, data: RemoveGroupData) = 
   data.page.remove data.group
 
-proc addTaskBtnClicked(btn: Button, data: AddRowData) = 
-  if data.entry.text == "": return
-  let taskRow = createTaskRow(data.entry.text, data.group)
-  data.group.add taskRow
-
 proc addTaskEntryActivated(entry: Entry, data: AddRowData) = 
   if data.entry.text == "": return
   let taskRow = createTaskRow(data.entry.text, data.group)
   data.group.add taskRow
 
 
-proc createRowThatAddNewTasks*(group: PreferencesGroup, page: PreferencesPage): PreferencesRow = 
+proc createRowThatAddNewTasks*(group: PreferencesGroup, page: Page): PreferencesRow = 
   let 
     row = newActionRow()
     entryTaskName = newEntry()
     addRowBtn = newFlatBtnWithIcon("list-add-symbolic")
     deleteGroupBtn = newFlatBtnWithIcon("close-symbolic")
-    # addRowBtn2 = newFlatBtnWithIcon("list-add-symbolic")
-    box = createBoxWithEntryAndBtns(entryTaskName, addRowBtn, deleteGroupBtn)
-
-  # row.activatableWidget = addRowBtn2
-  # row.connect("activated", addTaskActionRowActivated,  (group, entryTaskName))
-  deleteGroupBtn.connect("clicked", deleteGroupBtnClicked, (page, group))
-  addRowBtn.connect("clicked", addTaskBtnClicked, (group, entryTaskName))
-  entryTaskName.connect("activate", addTaskEntryActivated, (group, entryTaskName))
-  # addRowBtn2.connect("clicked", sas)
-  box.homogeneous = true
-
-  row.child = box
+    # box = createBoxWithEntryAndBtns(entryTaskName, addRowBtn, deleteGroupBtn)
   
+
+
+  # box.homogeneous = true
+  let (btn, entry, box2) = createRevealerWithEntry("list-add-symbolic")
+  assert(btn != nil)
+  assert(entry != nil)
+  assert(box2 != nil)
+  box2.append deleteGroupBtn
+  deleteGroupBtn.connect("clicked", deleteGroupBtnClicked, (page, group))
+  # btn.connect("clicked", addTaskBtnClicked, (group, entry))
+  entry.connect("activate", addTaskEntryActivated, (group, entry))
+
+
+  row.child = box2
   result = row
 
-proc addGroup*(page: PreferencesPage, title: string) = 
+proc addGroup*(page: Page, title: string) = 
   let 
     group = newPreferencesGroup()
-
-
   group.title = title
-  # group.description = title
   echo "try to add group with title: ", group.title, " and description: ", group.description
   group.add createRowThatAddNewTasks(group, page)
   page.add group
