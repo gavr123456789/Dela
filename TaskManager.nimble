@@ -12,3 +12,4 @@ bin           = @["TaskManager"]
 
 requires "nim >= 1.4.8"
 requires "gintro"
+requires "print"

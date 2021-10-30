@@ -15,7 +15,7 @@ proc createTab(entry: Entry, sas: Data) =
     sas.revealer.revealChild = false
     return
 
-  let page1 = sas.tabView.append createPage2()
+  let page1 = sas.tabView.append createPage()
   page1.title = entry.text
     
   sas.revealer.revealChild = false

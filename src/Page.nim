@@ -3,6 +3,9 @@ import std/with
 import Group
 import Utils
 import Types
+import std/sets
+import std/json
+
 
 type 
   Task* = object
@@ -10,9 +13,7 @@ type
     timeStarted: int
     fullTime: int
 
-
-
-proc createPage2*(): Page = 
+proc createPage*(): Page = 
   let
       page = newPreferencesPage(Types.Page)
       group = newPreferencesGroup()
@@ -41,3 +42,11 @@ proc createPage2*(): Page =
   
     
   result = page
+
+proc saveGroupToJson*(page: Page): JsonNode =
+  # let jsonNode = %* { "name": group.label.text }
+  var jsonRows: seq[JsonNode]
+  for group in page.groups:
+    jsonRows.add group.saveGroupToJson
+  
+  return % jsonRows

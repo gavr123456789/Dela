@@ -1,5 +1,10 @@
 import gintro/[gtk4, gobject, gio, adw]
-import std/with
+import std/with, hashes
+
+proc hash*(b: Widget): Hash = 
+  # create hash from widget pointer
+  result =  cast[Hash](cast[uint](b) shr 3)
+  echo result
 
 
 proc newOutlineBtn*(text: string = ""): Button = 
@@ -25,14 +30,14 @@ proc createLinkedBox*(widgets: seq[Widget]): Box =
     result.append index
 
 
-proc setWidgetToEnd*(widget: Widget) = 
+func setWidgetToEnd*(widget: Widget) = 
   with widget: 
     halign = Align.end
     valign = Align.center
     marginStart = 10
     marginEnd = 10
 
-proc setWidgetToStart*(widget: Widget) = 
+func setWidgetToStart*(widget: Widget) = 
   with widget: 
     halign = Align.start
     valign = Align.center

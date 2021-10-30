@@ -3,7 +3,9 @@ import std/with
 import Row
 import Utils
 import Types
+import print
 proc addGroup*(page: Page, title: string);
+import std/sets
 
 type 
   AddGroupData* = tuple
@@ -21,11 +23,18 @@ proc addGroupEntryActivated*(entry: Entry, data: AddGroupData) =
   addGroup(data.page, data.entry.text)
 
 proc deleteGroupBtnClicked*(btn: Button, data: RemoveGroupData) = 
+
+  data.page.groups.excl data.group
+  print "after group deleted: ", data.page.groups
   data.page.remove data.group
 
 proc addTaskEntryActivated(entry: Entry, data: AddRowData) = 
   if data.entry.text == "": return
   let taskRow = createTaskRow(data.entry.text, data.group)
+
+  data.group.rows.incl taskRow
+  print "after add task: ", data.group.rows
+
   data.group.add taskRow
 
 
@@ -57,4 +66,19 @@ proc addGroup*(page: Page, title: string) =
   group.title = title
   echo "try to add group with title: ", group.title, " and description: ", group.description
   group.add createRowThatAddNewTasks(group, page)
+
+  page.groups.incl group
+  print "after add group ", page.groups
+
   page.add group
+
+
+
+import std/json
+proc saveGroupToJson*(group: Group): JsonNode =
+  # let jsonNode = %* { "name": group.label.text }
+  var jsonRows: seq[JsonNode]
+  for row in group.rows:
+    jsonRows.add row.saveRowToJson
+  
+  return % jsonRows

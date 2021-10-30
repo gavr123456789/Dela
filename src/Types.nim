@@ -1,17 +1,18 @@
 import gintro/[gtk4, gobject, adw]
-
+import std/sets
 
 type 
   Row* = ref object of ExpanderRow
     isPlaying*: bool
     time*: int
     label*: Label
+    textView*: TextView
     done*: bool
     playPauseBtn*: Button
 
 type Group* = ref object of PreferencesGroup
-  rows: seq[Row]
+  rows*: HashSet[Row]
     
     
 type Page* = ref object of PreferencesPage
-  groups: seq[Group]
+  groups*: HashSet[Group]

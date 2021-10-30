@@ -2,6 +2,8 @@ import gintro/[gtk4, gobject, gio, pango, adw, glib]
 import std/with
 import Utils
 import Types
+import std/sets
+import print
 
 const
   PLAYICON = "media-playback-start-symbolic"
@@ -90,7 +92,10 @@ proc playPauseClicked(btn: Button, row: Row) =
   
   echo "isPlaying = ", row.isPlaying
   
+
 proc removeRowClicked(btn: Button, data: RemoveRowData) = 
+  data.group.rows.excl data.row
+  print "after remove task: ", data.group.rows
   data.group.remove data.row
 
 proc playBtnWithTime(playBtn: Button, time: Label): Box = 
@@ -132,6 +137,7 @@ proc createTaskRow*(title: string, group: Group): Row =
 
   textView.wrapMode = gtk4.WrapMode.word
   row.playPauseBtn = playPauseBtn
+  row.textView = textView
 
   with doneDeleteEditBox:
     append doneTaskBtn
@@ -155,8 +161,12 @@ proc createTaskRow*(title: string, group: Group): Row =
 
 
 import std/json
-func saveRowToJson(row: Row): auto =
-  let qwe = %* {"name": row.label.text}
+proc saveRowToJson*(row: Row): JsonNode =
+  var startIter = TextIter()
+  var endIter = TextIter()
+  row.textView.buffer.getBounds(startIter, endIter)
+  let text = row.textView.buffer.getText(startIter, endIter, false)
+  let jsonNode = %* { "name": row.title, "time": row.time, "note": text, "done": row.done }
 
-  return row
+  return jsonNode
 
