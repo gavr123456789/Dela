@@ -76,9 +76,12 @@ proc addGroup*(page: Page, title: string) =
 
 import std/json
 proc saveGroupToJson*(group: Group): JsonNode =
-  # let jsonNode = %* { "name": group.label.text }
   var jsonRows: seq[JsonNode]
+  var jsonObject: JsonNode = newJObject()
   for row in group.rows:
     jsonRows.add row.saveRowToJson
   
-  return % jsonRows
+
+  jsonObject.add(group.title, % jsonRows)
+
+  return jsonObject

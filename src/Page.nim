@@ -13,14 +13,14 @@ type
     timeStarted: int
     fullTime: int
 
-proc createPage*(): Page = 
+proc createPage*(pageName: string = "main"): Page = 
   let
-      page = newPreferencesPage(Types.Page)
-      group = newPreferencesGroup()
-      rowAddGroup = newActionRow()
-      entryGroupName = newEntry()
-      addNewGroupBtn = newFlatBtnWithIcon("list-add-symbolic")
-      box = createBoxWithEntryAndBtn(entryGroupName, addNewGroupBtn)
+    page = newPreferencesPage(Types.Page)
+    group = newPreferencesGroup()
+    rowAddGroup = newActionRow()
+    entryGroupName = newEntry()
+    addNewGroupBtn = newFlatBtnWithIcon("list-add-symbolic")
+    box = createBoxWithEntryAndBtn(entryGroupName, addNewGroupBtn)
 
   addNewGroupBtn.connect("clicked", addGroupBtnClicked, (page, entryGroupName))
   entryGroupName.connect("activate", addGroupEntryActivated, (page, entryGroupName))
@@ -37,7 +37,7 @@ proc createPage*(): Page =
   with page:
     name = "1"
     iconName = "emblem-flag-purple-symbolic"
-    title = "main"
+    title = pageName
     add group
   
     
@@ -45,8 +45,14 @@ proc createPage*(): Page =
 
 proc saveGroupToJson*(page: Page): JsonNode =
   # let jsonNode = %* { "name": group.label.text }
-  var jsonRows: seq[JsonNode]
+  var jsonGroups: seq[JsonNode]
+  var jsonObject: JsonNode = newJObject()
+
   for group in page.groups:
-    jsonRows.add group.saveGroupToJson
+    jsonGroups.add group.saveGroupToJson
   
-  return % jsonRows
+  jsonObject.add(page.title, % jsonGroups)
+
+  return jsonObject
+
+

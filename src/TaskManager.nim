@@ -10,8 +10,6 @@ proc addNewPage(btn: Button, tabView: TabView) =
   let page = tabView.append newLabel($tabView.nPages)
   page.title = $tabView.nPages
 
-
-
 proc activate(app: gtk4.Application) =
   adw.init()
 
@@ -31,6 +29,7 @@ proc activate(app: gtk4.Application) =
 
   # add to buttons to header
   addRevealerWithEntryToHeaderBar(header, tabView)
+
   header.packStart saveToJsonPageBtn
 
   # save to JSON connecting
@@ -42,7 +41,7 @@ proc activate(app: gtk4.Application) =
   let page = tabView.append taskPage1
   page.title = "Main"
 
-  saveToJsonPageBtn.connect("clicked", save, taskPage1)
+  saveToJsonPageBtn.connect("clicked", save, tabView)
 
 
 
