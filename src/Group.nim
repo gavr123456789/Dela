@@ -11,7 +11,7 @@ type
     entry: Entry
   RemoveGroupData* = tuple
     page: Page
-    group: PreferencesGroup
+    group: Group
 
 
 proc addGroupBtnClicked*(btn: Button, data: AddGroupData) = 
@@ -29,15 +29,13 @@ proc addTaskEntryActivated(entry: Entry, data: AddRowData) =
   data.group.add taskRow
 
 
-proc createRowThatAddNewTasks*(group: PreferencesGroup, page: Page): PreferencesRow = 
+proc createRowThatAddNewTasks*(group: Group, page: Page): PreferencesRow = 
   let 
     row = newActionRow()
-    entryTaskName = newEntry()
-    addRowBtn = newFlatBtnWithIcon("list-add-symbolic")
+    # entryTaskName = newEntry()
+    # addRowBtn = newFlatBtnWithIcon("list-add-symbolic")
     deleteGroupBtn = newFlatBtnWithIcon("close-symbolic")
     # box = createBoxWithEntryAndBtns(entryTaskName, addRowBtn, deleteGroupBtn)
-  
-
 
   # box.homogeneous = true
   let (btn, entry, box2) = createRevealerWithEntry("list-add-symbolic")
@@ -55,7 +53,7 @@ proc createRowThatAddNewTasks*(group: PreferencesGroup, page: Page): Preferences
 
 proc addGroup*(page: Page, title: string) = 
   let 
-    group = newPreferencesGroup()
+    group = newPreferencesGroup(Types.Group)
   group.title = title
   echo "try to add group with title: ", group.title, " and description: ", group.description
   group.add createRowThatAddNewTasks(group, page)

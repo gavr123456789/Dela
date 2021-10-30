@@ -1,26 +1,20 @@
 import gintro/[gtk4, gobject, gio, pango, adw, glib]
 import std/with
 import Utils
+import Types
 
 const
   PLAYICON = "media-playback-start-symbolic"
   PAUSEICON = "media-playback-pause-symbolic"
   DOUBLECLICICON ="dino-double-tick-symbolic"
 
-type 
-  Row* = ref object of ExpanderRow
-    isPlaying*: bool
-    time*: int
-    label*: Label
-    done: bool
-    playPauseBtn: Button
 
 type
   AddRowData* = tuple
-    group: PreferencesGroup
+    group: Group
     entry: Entry
   RemoveRowData = tuple
-    group: PreferencesGroup
+    group: Group
     row: Row
 
 type 
@@ -120,9 +114,9 @@ proc doneTaskClicked(btn: Button, row: Row) =
     row.playPauseBtn.sensitive = true
 
 
-proc createTaskRow*(title: string, group: PreferencesGroup): Row = 
+proc createTaskRow*(title: string, group: Group): Row = 
   let 
-    row = newExpanderRow(Row)
+    row = newExpanderRow(Types.Row)
     playPauseBtn = newOutlineBtnWithIcon(PLAYICON)
     textView = newTextView()
 
