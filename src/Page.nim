@@ -3,6 +3,7 @@ import std/with
 import Group
 import Utils
 import Types
+import Load
 import std/sets
 import std/json
 
@@ -13,14 +14,14 @@ type
     timeStarted: int
     fullTime: int
 
-proc createPage*(pageName: string = "main"): Page = 
+proc createPage*(pageName: string = "main", loadedGroups: seq[GroupSave] = @[]): Page = 
   let
     page = newPreferencesPage(Types.Page)
-    group = newPreferencesGroup()
     rowAddGroup = newActionRow()
     entryGroupName = newEntry()
     addNewGroupBtn = newFlatBtnWithIcon("list-add-symbolic")
     box = createBoxWithEntryAndBtn(entryGroupName, addNewGroupBtn)
+    group = newPreferencesGroup()
 
   addNewGroupBtn.connect("clicked", addGroupBtnClicked, (page, entryGroupName))
   entryGroupName.connect("activate", addGroupEntryActivated, (page, entryGroupName))
@@ -40,6 +41,7 @@ proc createPage*(pageName: string = "main"): Page =
     title = pageName
     add group
   
+
     
   result = page
 

@@ -5,6 +5,7 @@ import Types
 import AddNewPageRevealer
 import Utils 
 import Save
+import Load
 
 proc addNewPage(btn: Button, tabView: TabView) = 
   let page = tabView.append newLabel($tabView.nPages)
@@ -12,7 +13,7 @@ proc addNewPage(btn: Button, tabView: TabView) =
 
 proc activate(app: gtk4.Application) =
   adw.init()
-
+  let loadedPages = readSaveFromFS().getPages()
   let
     window = adw.newApplicationWindow(app)
     header = adw.newHeaderBar()
@@ -24,7 +25,16 @@ proc activate(app: gtk4.Application) =
     tabBar = newTabBar()
 
     tabView = newTabView()
-    taskPage1 = createPage()
+    # taskPage1 = createPage()
+
+  for loadedPage in loadedPages:
+    let loadedGroups = loadedPage.getGroupsFromPage()
+    let taskPage = createPage(loadedPage.pageName, loadedGroups)
+    with taskPage: 
+      vexpand = true
+      hexpand = true
+    let page = tabView.append taskPage
+    page.title = loadedPage.pageName
 
 
   # add to buttons to header
@@ -34,12 +44,9 @@ proc activate(app: gtk4.Application) =
 
   # save to JSON connecting
 
-  with taskPage1: 
-    vexpand = true
-    hexpand = true
+
   
-  let page = tabView.append taskPage1
-  page.title = "Main"
+
 
   saveToJsonPageBtn.connect("clicked", save, tabView)
 
