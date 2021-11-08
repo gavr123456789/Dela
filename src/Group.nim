@@ -1,11 +1,13 @@
 import gintro/[gtk4, gobject, gio, pango, adw]
 import std/with
+import std/sets
+import print
 import Row
 import Utils
 import Types
-import print
-proc addGroup*(page: Page, title: string);
-import std/sets
+import Load
+
+proc addGroupToPage*(page: Page, title: string, loadedTasks: seq[TaskSave] = @[]);
 
 type 
   AddGroupData* = tuple
@@ -17,10 +19,10 @@ type
 
 
 proc addGroupBtnClicked*(btn: Button, data: AddGroupData) = 
-  addGroup(data.page, data.entry.text)
+  addGroupToPage(data.page, data.entry.text)
 
 proc addGroupEntryActivated*(entry: Entry, data: AddGroupData) = 
-  addGroup(data.page, data.entry.text)
+  addGroupToPage(data.page, data.entry.text)
 
 proc deleteGroupBtnClicked*(btn: Button, data: RemoveGroupData) = 
 
@@ -33,9 +35,9 @@ proc addTaskEntryActivated(entry: Entry, data: AddRowData) =
   let taskRow = createTaskRow(data.entry.text, data.group)
 
   data.group.rows.incl taskRow
-  print "after add task: ", data.group.rows
-
   data.group.add taskRow
+  # print "after add task: ", data.group.rows
+
 
 
 proc createRowThatAddNewTasks*(group: Group, page: Page): PreferencesRow = 
@@ -60,7 +62,7 @@ proc createRowThatAddNewTasks*(group: Group, page: Page): PreferencesRow =
   row.child = box2
   result = row
 
-proc addGroup*(page: Page, title: string) = 
+proc addGroupToPage*(page: Page, title: string, loadedTasks: seq[TaskSave] = @[]) = 
   let 
     group = newPreferencesGroup(Types.Group)
   group.title = title
@@ -68,7 +70,13 @@ proc addGroup*(page: Page, title: string) =
   group.add createRowThatAddNewTasks(group, page)
 
   page.groups.incl group
-  print "after add group ", page.groups
+  # print "after add group ", page.groups
+
+  for loadedTask in loadedTasks: 
+    # let tasks = getTasksFromGroup(loadedGroup) 
+    let taskRow = createTaskRow(loadedTask.name, group, loadedTask)
+    group.rows.incl taskRow
+    group.add taskRow
 
   page.add group
 

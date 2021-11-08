@@ -1,9 +1,10 @@
 import gintro/[gtk4, gobject, gio, pango, adw, glib]
 import std/with
+import print
+import std/sets
 import Utils
 import Types
-import std/sets
-import print
+import Load
 
 const
   PLAYICON = "media-playback-start-symbolic"
@@ -103,8 +104,7 @@ proc playBtnWithTime(playBtn: Button, time: Label): Box =
   result.append playBtn
   result.append time
 
-
-proc doneTaskClicked(btn: Button, row: Row) = 
+proc doneTask(row: Row) = 
   if row.isPlaying: return
   row.done = not row.done
 
@@ -118,8 +118,11 @@ proc doneTaskClicked(btn: Button, row: Row) =
     row.playPauseBtn.iconName = PLAYICON
     row.playPauseBtn.sensitive = true
 
+proc doneTaskClicked(btn: Button, row: Row) = 
+  row.doneTask()
 
-proc createTaskRow*(title: string, group: Group): Row = 
+
+proc createTaskRow*(title: string, group: Group, taskSave: TaskSave = TaskSave()): Row = 
   let 
     row = newExpanderRow(Types.Row)
     playPauseBtn = newOutlineBtnWithIcon(PLAYICON)
@@ -156,6 +159,20 @@ proc createTaskRow*(title: string, group: Group): Row =
   playPauseBtn.connect("clicked", playPauseClicked, row)
   deleteTaskFooterBtn.connect("clicked", removeRowClicked, (group, row))
   doneTaskBtn.connect("clicked", doneTaskClicked, row)
+
+  if taskSave.name != "":
+    row.time = taskSave.time
+    row.label.text = $taskSave.time
+
+    if taskSave.done:
+      row.doneTask()
+    row.done = taskSave.done
+    
+
+    row.textView.buffer.setText taskSave.note, taskSave.note.len
+    row.title = taskSave.name
+
+
   row.title = title
   result = row
 
