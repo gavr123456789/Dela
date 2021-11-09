@@ -1,7 +1,6 @@
 import json
 import Types
 import Page
-import print
 import gintro/[gtk4, adw]
 # import os
 

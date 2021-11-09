@@ -21,27 +21,30 @@ proc createPage*(pageName: string = "main", loadedGroups: seq[GroupSave] = @[]):
     entryGroupName = newEntry()
     addNewGroupBtn = newFlatBtnWithIcon("list-add-symbolic")
     box = createBoxWithEntryAndBtn(entryGroupName, addNewGroupBtn)
-    # group = newPreferencesGroup()
+    group = newPreferencesGroup()
 
   addNewGroupBtn.connect("clicked", addGroupBtnClicked, (page, entryGroupName))
   entryGroupName.connect("activate", addGroupEntryActivated, (page, entryGroupName))
 
   box.homogeneous = true
 
+  with group:
+    add rowAddGroup
+
   with rowAddGroup:
     child = box
     # activatableWidget = addNewGroupBtn
-
-  for loadedGroup in loadedGroups: 
-    let tasks = getTasksFromGroup(loadedGroup) 
-    page.addGroupToPage(loadedGroup.groupName, tasks)
-    
 
   with page:
     name = "1"
     iconName = "emblem-flag-purple-symbolic"
     title = pageName
-  
+    add group
+
+  for loadedGroup in loadedGroups: 
+    let tasks = getTasksFromGroup(loadedGroup) 
+    page.addGroupToPage(loadedGroup.groupName, tasks)
+
   result = page
 
 proc saveGroupToJson*(page: Page): JsonNode =
