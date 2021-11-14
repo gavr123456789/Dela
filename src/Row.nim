@@ -155,7 +155,7 @@ proc createTaskRow*(title: string, group: Group, taskSave: TaskSave = TaskSave()
     append textView
     
   row.addPrefix playBtnWithTimeBox
-  row.add footerBox
+  row.addRow footerBox
   playPauseBtn.connect("clicked", playPauseClicked, row)
   deleteTaskFooterBtn.connect("clicked", removeRowClicked, (group, row))
   doneTaskBtn.connect("clicked", doneTaskClicked, row)

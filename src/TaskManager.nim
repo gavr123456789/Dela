@@ -63,7 +63,7 @@ proc activate(app: gtk4.Application) =
     append tabView
 
   with window:
-    child = mainBox
+    content = mainBox
     title = ""
     defaultSize = (100, 300)
     show
