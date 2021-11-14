@@ -12,10 +12,6 @@ proc getAllPages(tabView: TabView): seq[TabPage] =
   for i in 0..<n:
     result.add tabView.getNthPage(i)
 
-proc createSaveFolderIfThereNot = 
-  if not SAVE_DIR_NAME.dirExists():
-    createDir getHomeDir() / SAVE_DIR_NAME
-
 proc save*(btn: Button, tabView: TabView): void = 
   let allPages = tabView.getAllPages()
   var jsonPages: seq[JsonNode]

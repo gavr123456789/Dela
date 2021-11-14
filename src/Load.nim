@@ -1,4 +1,6 @@
-import json
+import json, os
+
+const SAVE_DIR_NAME = ".config" / "Dela" / "state.json"
 
 type PageSave* = object
   pageName*: string
@@ -14,7 +16,7 @@ type TaskSave* = object
   note*: string  
   done*: bool  
 
-proc readSaveFromFS*(): JsonNode = "state.json".readFile.parseJson
+proc readSaveFromFS*(): JsonNode = (getHomeDir() / SAVE_DIR_NAME).readFile.parseJson
 
 func getPages*(x: JsonNode): seq[PageSave] = 
   assert x.kind == JArray
