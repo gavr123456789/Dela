@@ -2,12 +2,19 @@ import json
 import Types
 import Page
 import gintro/[gtk4, adw]
-# import os
+import os
+
+const SAVE_DIR_NAME = ".config" / "Dela"
+
 
 proc getAllPages(tabView: TabView): seq[TabPage] = 
   let n = tabView.getNPages()
   for i in 0..<n:
     result.add tabView.getNthPage(i)
+
+proc createSaveFolderIfThereNot = 
+  if not SAVE_DIR_NAME.dirExists():
+    createDir getHomeDir() / SAVE_DIR_NAME
 
 proc save*(btn: Button, tabView: TabView): void = 
   let allPages = tabView.getAllPages()
@@ -19,4 +26,6 @@ proc save*(btn: Button, tabView: TabView): void =
   # let jsonPage = page.saveGroupToJson()
   echo "-------------------"
   # echo jsonPage.pretty()
-  writeFile("state.json", pretty(% jsonPages))
+  let savePath = getHomeDir() / SAVE_DIR_NAME
+  discard existsOrCreateDir(savePath)
+  writeFile(savePath / "state.json", pretty(% jsonPages))
