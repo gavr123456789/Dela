@@ -22,6 +22,7 @@ const DEFAULT_CONTENT = """
 ]
 """
 
+
 type PageSave* = object
   pageName*: string
   pageContent*: JsonNode
@@ -61,7 +62,6 @@ func getGroupsFromPage*(page: PageSave): seq[GroupSave] =
       # debugEcho groupName
       # debugEcho groupContent
       result.add GroupSave(groupName: groupName, groupContent: groupContent)
-
     
 func getTasksFromGroup*(group: GroupSave): seq[TaskSave] = 
   assert group.groupContent.kind == JArray
@@ -73,5 +73,3 @@ func getTasksFromGroup*(group: GroupSave): seq[TaskSave] =
       note: task["note"].getStr,
       done: task["done"].getBool
     )
-  
-# readSaveFromFS().getPages()[0].getGroupsFromPage()[0].getTasksFromGroup.echo

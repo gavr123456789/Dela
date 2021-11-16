@@ -1,15 +1,15 @@
 import gintro/[gtk4, gobject, gio, pango, adw, glib, gdk4]
 import std/with
 import Page
-import Types
 import AddNewPageRevealer
 import Utils 
 import Save
 import Load
 
-proc addNewPage(btn: Button, tabView: TabView) = 
-  let page = tabView.append newLabel($tabView.nPages)
-  page.title = $tabView.nPages
+proc windowOnClose(self: adw.ApplicationWindow, tabView: TabView): bool = 
+ save(tabView)
+ return gdk4.EVENT_PROPAGATE
+
 
 proc activate(app: gtk4.Application) =
   adw.init()
@@ -17,15 +17,10 @@ proc activate(app: gtk4.Application) =
   let
     window = adw.newApplicationWindow(app)
     header = adw.newHeaderBar()
-    # addNewPageBtn = newButtonFromIconName("list-add-symbolic")
     saveToJsonPageBtn = newFlatBtnWithIcon("document-save-symbolic")
-
     mainBox = newBox(Orientation.vertical, 0)
-
     tabBar = newTabBar()
-
     tabView = newTabView()
-    # taskPage1 = createPage()
 
   for loadedPage in loadedPages:
     let loadedGroups = loadedPage.getGroupsFromPage()
@@ -34,28 +29,15 @@ proc activate(app: gtk4.Application) =
       vexpand = true
       hexpand = true
     let page = tabView.append taskPage
-    page.title = loadedPage.pageName
-
+    page.title = loadedPage.pageName.cstring
 
   # add to buttons to header
   addRevealerWithEntryToHeaderBar(header, tabView)
-
   header.packStart saveToJsonPageBtn
-
-  # save to JSON connecting
-
-
-  
-
-
-  saveToJsonPageBtn.connect("clicked", save, tabView)
-
-
-
+  saveToJsonPageBtn.connect("clicked", saveBtnPressed, tabView)
   tabBar.view = tabView
   # addNewPageBtn.connect("clicked", addNewPage, tabView)
-  # window.connect("close_request", windowOnClose, page)
-
+  window.connect("close_request", windowOnClose, tabView)
 
   with mainBox: 
     append header

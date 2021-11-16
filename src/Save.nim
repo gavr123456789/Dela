@@ -12,7 +12,7 @@ proc getAllPages(tabView: TabView): seq[TabPage] =
   for i in 0..<n:
     result.add tabView.getNthPage(i)
 
-proc save*(btn: Button, tabView: TabView): void = 
+proc save*(tabView: TabView) =
   let allPages = tabView.getAllPages()
   var jsonPages: seq[JsonNode]
   for tabPage in allPages:
@@ -25,3 +25,7 @@ proc save*(btn: Button, tabView: TabView): void =
   let savePath = getHomeDir() / SAVE_DIR_NAME
   discard existsOrCreateDir(savePath)
   writeFile(savePath / "state.json", pretty(% jsonPages))
+  
+
+proc saveBtnPressed*(btn: Button, tabView: TabView) = 
+  save(tabView)
