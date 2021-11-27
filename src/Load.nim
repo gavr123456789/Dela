@@ -49,10 +49,12 @@ proc readSaveFromFS*(): JsonNode =
 
 func getPages*(x: JsonNode): seq[PageSave] = 
   assert x.kind == JArray
-  for a in x.elems:
-    assert a.kind == JObject
-    for pageName, pageContent in a:
-      result.add PageSave(pageName: pageName, pageContent: pageContent)
+  case x.kind
+  of JArray:
+    for a in x.elems:
+      for pageName, pageContent in a:
+        result.add PageSave(pageName: pageName, pageContent: pageContent)
+  else: discard
 
 func getGroupsFromPage*(page: PageSave): seq[GroupSave] =
   assert page.pageContent.kind == JArray

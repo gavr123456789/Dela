@@ -39,6 +39,8 @@ proc createPage*(pageName: string = "main", loadedGroups: seq[GroupSave] = @[]):
     name = "1"
     iconName = "emblem-flag-purple-symbolic"
     title = pageName
+    # vexpand = true
+    # hexpand = true
     add group
 
   for loadedGroup in loadedGroups: 

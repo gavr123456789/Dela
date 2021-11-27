@@ -73,7 +73,6 @@ proc addGroupToPage*(page: Page, title: string, loadedTasks: seq[TaskSave] = @[]
   # print "after add group ", page.groups
 
   for loadedTask in loadedTasks: 
-    # let tasks = getTasksFromGroup(loadedGroup) 
     let taskRow = createTaskRow(loadedTask.name, group, loadedTask)
     group.rows.incl taskRow
     group.add taskRow
