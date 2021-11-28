@@ -64,6 +64,7 @@ proc activate(app: gtk4.Application) =
     packEnd archiveRevealBtn
 
   saveToJsonPageBtn.connect("clicked", saveBtnPressed, tabView)
+  window.connect("close_request", windowOnClose, tabView)
 
   tabBar.view = tabView
   tabView.hexpand = true
