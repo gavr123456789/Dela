@@ -6,6 +6,7 @@ import Row
 import Utils
 import Types
 import Load
+import json
 
 proc addGroupToPage*(page: Page, title: string, loadedTasks: seq[TaskSave] = @[]);
 
@@ -13,9 +14,14 @@ type
   AddGroupData* = tuple
     page: Page
     entry: Entry
+
   RemoveGroupData* = tuple
     page: Page
     group: Group
+  ArchiveGroupData* = tuple
+    page: Page
+    group: Group
+
 
 
 proc addGroupBtnClicked*(btn: Button, data: AddGroupData) = 
@@ -24,11 +30,14 @@ proc addGroupBtnClicked*(btn: Button, data: AddGroupData) =
 proc addGroupEntryActivated*(entry: Entry, data: AddGroupData) = 
   addGroupToPage(data.page, data.entry.text)
 
+proc deleteGroup*(page: Page, group: Group) = 
+  page.groups.excl group
+  print "after group deleted: ", page.groups
+  page.remove group
 proc deleteGroupBtnClicked*(btn: Button, data: RemoveGroupData) = 
+  deleteGroup(data.page, data.group)
 
-  data.page.groups.excl data.group
-  print "after group deleted: ", data.page.groups
-  data.page.remove data.group
+
 
 proc addTaskEntryActivated(entry: Entry, data: AddRowData) = 
   if data.entry.text == "": return
@@ -38,28 +47,36 @@ proc addTaskEntryActivated(entry: Entry, data: AddRowData) =
   data.group.add taskRow
   # print "after add task: ", data.group.rows
 
+proc moveGroupToArchiveBtnClicked*(btn: Button, data: ArchiveGroupData) = 
+  let serialized = data.group.saveGroupToJson() 
+  let groupSave = GroupSave(groupName: data.group.title, groupContent: serialized[data.group.title])
+  let tasks = groupSave.getTasksFromGroup()
+
+  archivePage.groups.incl data.group
+  archivePage.addGroupToPage(data.group.title, tasks)
+  deleteGroup(data.page, data.group)
+  
 
 
-proc createRowThatAddNewTasks*(group: Group, page: Page): PreferencesRow = 
+proc createRowThatAddNewTasks(group: Group, page: Page): PreferencesRow = 
   let 
     row = newActionRow()
-    # entryTaskName = newEntry()
-    # addRowBtn = newFlatBtnWithIcon("list-add-symbolic")
     deleteGroupBtn = newFlatBtnWithIcon("close-symbolic")
-    # box = createBoxWithEntryAndBtns(entryTaskName, addRowBtn, deleteGroupBtn)
+    addToArchiveGroupBtn = newFlatBtnWithIcon("close-symbolic")
 
-  # box.homogeneous = true
-  let (btn, entry, box2) = createRevealerWithEntry("list-add-symbolic")
+  let (btn, entry, box) = createRevealerWithEntry("list-add-symbolic")
   assert(btn != nil)
   assert(entry != nil)
-  assert(box2 != nil)
-  box2.append deleteGroupBtn
+  assert(box != nil)
+
+  with box:
+    append deleteGroupBtn
+    append addToArchiveGroupBtn
+    
   deleteGroupBtn.connect("clicked", deleteGroupBtnClicked, (page, group))
-  # btn.connect("clicked", addTaskBtnClicked, (group, entry))
+  addToArchiveGroupBtn.connect("clicked", moveGroupToArchiveBtnClicked, (page, group))
   entry.connect("activate", addTaskEntryActivated, (group, entry))
-
-
-  row.child = box2
+  row.child = box
   result = row
 
 proc addGroupToPage*(page: Page, title: string, loadedTasks: seq[TaskSave] = @[]) = 
@@ -70,7 +87,6 @@ proc addGroupToPage*(page: Page, title: string, loadedTasks: seq[TaskSave] = @[]
   group.add createRowThatAddNewTasks(group, page)
 
   page.groups.incl group
-  # print "after add group ", page.groups
 
   for loadedTask in loadedTasks: 
     let taskRow = createTaskRow(loadedTask.name, group, loadedTask)
@@ -78,17 +94,3 @@ proc addGroupToPage*(page: Page, title: string, loadedTasks: seq[TaskSave] = @[]
     group.add taskRow
 
   page.add group
-
-
-
-import std/json
-proc saveGroupToJson*(group: Group): JsonNode =
-  var jsonRows: seq[JsonNode]
-  var jsonObject: JsonNode = newJObject()
-  for row in group.rows:
-    jsonRows.add row.saveRowToJson
-  
-
-  jsonObject.add(group.title, % jsonRows)
-
-  return jsonObject

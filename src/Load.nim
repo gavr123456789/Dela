@@ -66,6 +66,8 @@ func getGroupsFromPage*(page: PageSave): seq[GroupSave] =
       result.add GroupSave(groupName: groupName, groupContent: groupContent)
     
 func getTasksFromGroup*(group: GroupSave): seq[TaskSave] = 
+  debugecho group.groupContent
+  debugecho "--------------------"
   assert group.groupContent.kind == JArray
   for task in group.groupContent.items: 
     assert task.kind == JObject

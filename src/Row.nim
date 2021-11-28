@@ -177,13 +177,3 @@ proc createTaskRow*(title: string, group: Group, taskSave: TaskSave = TaskSave()
   result = row
 
 
-import std/json
-proc saveRowToJson*(row: Row): JsonNode =
-  var startIter = TextIter()
-  var endIter = TextIter()
-  row.textView.buffer.getBounds(startIter, endIter)
-  let text = row.textView.buffer.getText(startIter, endIter, false)
-  let jsonNode = %* { "name": row.title, "time": row.time, "note": text, "done": row.done }
-
-  return jsonNode
-

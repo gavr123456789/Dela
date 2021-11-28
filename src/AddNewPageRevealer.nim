@@ -2,6 +2,7 @@ import gintro/[gtk4, gobject, gio, pango, adw]
 import std/with
 import Page
 import Utils
+import Types
 
 type 
   Data = tuple

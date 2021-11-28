@@ -39,8 +39,6 @@ proc createPage*(pageName: string = "main", loadedGroups: seq[GroupSave] = @[]):
     name = "1"
     iconName = "emblem-flag-purple-symbolic"
     title = pageName
-    # vexpand = true
-    # hexpand = true
     add group
 
   for loadedGroup in loadedGroups: 
@@ -48,17 +46,3 @@ proc createPage*(pageName: string = "main", loadedGroups: seq[GroupSave] = @[]):
     page.addGroupToPage(loadedGroup.groupName, tasks)
 
   result = page
-
-proc saveGroupToJson*(page: Page): JsonNode =
-  # let jsonNode = %* { "name": group.label.text }
-  var jsonGroups: seq[JsonNode]
-  var jsonObject: JsonNode = newJObject()
-
-  for group in page.groups:
-    jsonGroups.add group.saveGroupToJson
-  
-  jsonObject.add(page.title, % jsonGroups)
-
-  return jsonObject
-
-

@@ -17,11 +17,11 @@ proc save*(tabView: TabView) =
   var jsonPages: seq[JsonNode]
   for tabPage in allPages:
     let page = tabPage.child.Page
-    jsonPages.add page.saveGroupToJson()
+    jsonPages.add page.savePageToJson()
+    
+  jsonPages.add archivePage.savePageToJson()
 
-  # let jsonPage = page.saveGroupToJson()
   echo "-------------------"
-  # echo jsonPage.pretty()
   let savePath = getHomeDir() / SAVE_DIR_NAME
   discard existsOrCreateDir(savePath)
   writeFile(savePath / "state.json", pretty(% jsonPages))
