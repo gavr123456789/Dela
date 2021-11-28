@@ -11,9 +11,6 @@ proc windowOnClose(self: adw.ApplicationWindow, tabView: TabView): bool =
  save(tabView)
  return gdk4.EVENT_PROPAGATE
 
-# proc addNewPage(btn: Button, tabView: TabView) = 
-#   let page = tabView.append newLabel($tabView.nPages)
-#   page.title = $tabView.nPages
 
 proc revealSideBarArchive(toggleButton: ToggleButton, reveal: Revealer) = 
   reveal.revealChild = toggleButton.active
@@ -35,7 +32,7 @@ proc activate(app: gtk4.Application) =
 
   with archiveRevealBtn:
     addCssClass("flat")
-    setIconName("dino-tick-symbolic")
+    setIconName("sidebar-hide-symbolic")
     connect("toggled", revealSideBarArchive, reveal)
   
   for loadedPage in loadedPages:
@@ -59,6 +56,7 @@ proc activate(app: gtk4.Application) =
       discard
 
   reveal.child.setSizeRequest(300,-1)
+  reveal.transitionType = RevealerTransitionType.slideRight
 
   with header:
     addRevealerWithEntryToHeaderBar(tabView)

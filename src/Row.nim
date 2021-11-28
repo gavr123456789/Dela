@@ -148,7 +148,7 @@ proc createTaskRow*(title: string, group: Group, taskSave: TaskSave = TaskSave()
     append deleteTaskFooterBtn
   
   doneDeleteEditBox.addCssClass "linked"
-  deleteTaskFooterBtn.addCssClass "destructive-action"
+  # deleteTaskFooterBtn.addCssClass "suggested-action"
 
   with footerBox: 
     append doneDeleteEditBox

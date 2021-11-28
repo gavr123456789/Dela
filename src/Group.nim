@@ -62,7 +62,7 @@ proc createRowThatAddNewTasks(group: Group, page: Page): PreferencesRow =
   let 
     row = newActionRow()
     deleteGroupBtn = newFlatBtnWithIcon("close-symbolic")
-    addToArchiveGroupBtn = newFlatBtnWithIcon("close-symbolic")
+    addToArchiveGroupBtn = newFlatBtnWithIcon("mail-archive-symbolic")
 
   let (btn, entry, box) = createRevealerWithEntry("list-add-symbolic")
   assert(btn != nil)
