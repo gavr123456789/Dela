@@ -41,6 +41,10 @@ proc activate(app: gtk4.Application) =
         loadedGroups = loadedPage.getGroupsFromPage()
       archivePage = createPage(loadedPage.pageName, loadedGroups)
       reveal.child = archivePage
+  if archivePage == nil:
+    echo "Создали архивную страницу"
+    archivePage = createPage("archive")
+    reveal.child = archivePage
   for loadedPage in loadedPages:
     echo "loading page name: ", loadedPage.pageName
     if loadedPage.pageName != "archive":
