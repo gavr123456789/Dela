@@ -29,13 +29,13 @@ type
     row: Row
 
 
-proc setTaskName(entry: Entry, data: Data) = 
+proc renameTask(entry: Entry, data: Data) = 
   echo entry.text.len
   if entry.text.len == 0:
     data.revealer.revealChild = false
     return
 
-  data.row.title = entry.text
+  data.row.title = entry.text.cstring
   data.revealer.revealChild = false
   entry.text = ""
 
@@ -48,12 +48,12 @@ proc openRevealer(self: Button, revealerAndEntry: RevealerAndEntry) =
 proc createRevealerWithEntry*(row: Row): Box =
   let
     mainBox = newBox(Orientation.horizontal, 3)
-    revealBtnSetTaskName = newFlatBtnWithIcon("document-edit-symbolic")
+    revealBtnrenameTask = newFlatBtnWithIcon("document-edit-symbolic")
     newTabNameReveal = newRevealer()
     tabNameEntry = newEntry()
 
-  with mainBox: 
-    append revealBtnSetTaskName
+  with mainBox:
+    append revealBtnrenameTask
     append newTabNameReveal
 
   with newTabNameReveal:
@@ -61,8 +61,8 @@ proc createRevealerWithEntry*(row: Row): Box =
     transitionType = RevealerTransitionType.swingRight
 
   
-  revealBtnSetTaskName.connect("clicked", openRevealer, (newTabNameReveal, tabNameEntry)) # tabNameEntry
-  tabNameEntry.connect("activate", setTaskName, (newTabNameReveal, row))
+  revealBtnrenameTask.connect("clicked", openRevealer, (newTabNameReveal, tabNameEntry)) # tabNameEntry
+  tabNameEntry.connect("activate", renameTask, (newTabNameReveal, row))
 
   result = mainBox
 

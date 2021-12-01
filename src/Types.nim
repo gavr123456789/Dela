@@ -3,14 +3,13 @@ import std/sets
 import json
 
 
-type 
-  Row* = ref object of ExpanderRow
-    isPlaying*: bool
-    time*: int
-    label*: Label
-    textView*: TextView
-    done*: bool
-    playPauseBtn*: Button
+type Row* = ref object of ExpanderRow
+  isPlaying*: bool
+  time*: int
+  label*: Label
+  textView*: TextView
+  done*: bool
+  playPauseBtn*: Button
 
 type Group* = ref object of PreferencesGroup
   rows*: HashSet[Row]
