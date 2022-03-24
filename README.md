@@ -2,7 +2,7 @@
 
 # Install
 1) install nimble - nim lang package manager
-2) `nimble run`
+2) `nimble run` to compile and run, `nimble install` to install, you can run it from terminal as `Dela`. Desktop file is not ready yet
 
 
 ### Archive and save stage on close
