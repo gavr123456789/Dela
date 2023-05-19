@@ -5,11 +5,7 @@ import std/sets
 import Utils
 import Types
 import Load
-
-const
-  PLAYICON = "media-playback-start-symbolic"
-  PAUSEICON = "media-playback-pause-symbolic"
-  DOUBLECLICICON ="dino-double-tick-symbolic"
+import IconNames
 
 
 type
@@ -48,7 +44,7 @@ proc openRevealer(self: Button, revealerAndEntry: RevealerAndEntry) =
 proc createRevealerWithEntry*(row: Row): Box =
   let
     mainBox = newBox(Orientation.horizontal, 3)
-    revealBtnrenameTask = newFlatBtnWithIcon("document-edit-symbolic")
+    revealBtnrenameTask = newFlatBtnWithIcon(EDITNAMEICON)
     newTabNameReveal = newRevealer()
     tabNameEntry = newEntry()
 
@@ -69,8 +65,8 @@ proc createRevealerWithEntry*(row: Row): Box =
 ### ROW
 proc updateGUI*(row: Row): bool =
   row.time.inc()
-  echo "updateGUIFromTime, sec: ", row.time
-  echo "updateGUIFromTime, isPlaying: ", row.isPlaying
+  # echo "updateGUIFromTime, sec: ", row.time
+  # echo "updateGUIFromTime, isPlaying: ", row.isPlaying
 
   if row.isPlaying:
     row.label.text = $row.time
@@ -133,8 +129,8 @@ proc createTaskRow*(title: string, group: Group, taskSave: TaskSave = TaskSave()
     playBtnWithTimeBox = playBtnWithTime(playPauseBtn, row.label)
 
     footerBox = newBox(Orientation.vertical, 0)
-    deleteTaskFooterBtn =  newFlatBtnWithIcon("close-symbolic")
-    doneTaskBtn = newFlatBtnWithIcon("dino-tick-symbolic") # TODO при нажатии превращается в undone и делает opacity 06
+    deleteTaskFooterBtn =  newFlatBtnWithIcon(DELETETASKICON)
+    doneTaskBtn = newFlatBtnWithIcon(DONETASKICON) # TODO при нажатии превращается в undone и делает opacity 06
     doneDeleteEditBox = newBox(Orientation.horizontal, 0)
     editNameBtn = createRevealerWithEntry(row)
 

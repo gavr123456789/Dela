@@ -6,6 +6,7 @@ import Utils
 import Save
 import Load
 import Types
+import IconNames
 
 proc windowOnClose(self: adw.ApplicationWindow, tabView: TabView): bool = 
  save(tabView)
@@ -21,7 +22,7 @@ proc activate(app: gtk4.Application) =
     loadedPages = readSaveFromFS().getPages()
     window = adw.newApplicationWindow(app)
     header = adw.newHeaderBar()
-    saveToJsonPageBtn = newFlatBtnWithIcon("document-save-symbolic")
+    saveToJsonPageBtn = newFlatBtnWithIcon(SAVETOJSON)
     mainBox = newBox(Orientation.vertical, 0)
     tabBar = newTabBar()
     tabView = newTabView()
@@ -32,7 +33,7 @@ proc activate(app: gtk4.Application) =
 
   with archiveRevealBtn:
     addCssClass("flat")
-    setIconName("sidebar-hide-symbolic")
+    setIconName(SHOWSIDEBAR)
     connect("toggled", revealSideBarArchive, reveal)
   
   for loadedPage in loadedPages:
@@ -90,7 +91,7 @@ proc activate(app: gtk4.Application) =
     show
 
 proc main() =
-  let app = newApplication("org.gtk.example")
+  let app = newApplication("com.github.gavr123456789.Dela")
   app.connect("activate", activate)
   discard run(app)
 

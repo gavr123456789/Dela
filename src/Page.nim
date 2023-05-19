@@ -1,11 +1,12 @@
 import gintro/[gtk4, gobject, gio, pango, adw]
 import std/with
+# import std/sets
+# import std/json
 import Group
 import Utils
 import Types
 import Load
-import std/sets
-import std/json
+import IconNames
 
 
 type 
@@ -19,7 +20,7 @@ proc createPage*(pageName: string = "main", loadedGroups: seq[GroupSave] = @[]):
     page = newPreferencesPage(Types.Page)
     rowAddGroup = newActionRow()
     entryGroupName = newEntry()
-    addNewGroupBtn = newFlatBtnWithIcon("list-add-symbolic")
+    addNewGroupBtn = newFlatBtnWithIcon(ADDNEWGROUP)
     box = createBoxWithEntryAndBtn(entryGroupName, addNewGroupBtn)
     group = newPreferencesGroup()
 
