@@ -8,7 +8,7 @@ const DEFAULT_CONTENT = """
   {
     "Main": [
       {
-        "TODO": [
+        "Task Group Example": [
           {
             "name": "Todo example",
             "time": 0,
