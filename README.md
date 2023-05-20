@@ -3,16 +3,11 @@
 
 # Install
 ### Arch
-yay -S nim
-bash install.sh
+`yay -S nim`  
+`bash install.sh`  
 
 # Uninstall
-bash uninstall.sh
-
-# Install from source
-1) install nimble - nim lang package manager
-2) `nimble run` to compile and run, `nimble install` to install, you can run it from terminal as `Dela`. Desktop file is not ready yet
-
+`bash uninstall.sh`
 
 ### Archive and save stage on close
 https://user-images.githubusercontent.com/30507409/143764558-8a3f633e-3ba4-4a7b-a704-b66a91625d9d.mp4  
