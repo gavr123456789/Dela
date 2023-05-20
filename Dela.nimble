@@ -11,7 +11,7 @@ bin           = @["Dela"]
 # Dependencies
 
 requires "nim >= 1.4.8"
-requires "gintro"
+requires "gintro#head"
 requires "print"
 
 
