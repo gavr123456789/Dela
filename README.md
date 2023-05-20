@@ -1,6 +1,15 @@
 # Dela - [GTK 4 LibAdwaita Nim] task manager
 
+
 # Install
+### Arch
+yay -S nim
+bash install.sh
+
+# Uninstall
+bash uninstall.sh
+
+# Install from source
 1) install nimble - nim lang package manager
 2) `nimble run` to compile and run, `nimble install` to install, you can run it from terminal as `Dela`. Desktop file is not ready yet
 
