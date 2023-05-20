@@ -4,7 +4,9 @@ Task manager with per task timer
   
 <img src="Dela.svg" width="300">
   
+<img src="https://github.com/gavr123456789/Dela/assets/30507409/34ad62cc-6001-4fba-8bcb-93c53c3255b6" width="300">  
   
+ 
 ## Install
 ### Arch
 `yay -S nim`  
