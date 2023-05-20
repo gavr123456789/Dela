@@ -1,7 +1,11 @@
-# Dela - [GTK 4 LibAdwaita Nim] task manager
-
-
-# Install
+# Dela [GTK 4 LibAdwaita Nim]
+Task manager with per task timer 
+  
+  
+<img src="Dela.svg" width="300">
+  
+  
+## Install
 ### Arch
 `yay -S nim`  
 `bash install.sh`  
