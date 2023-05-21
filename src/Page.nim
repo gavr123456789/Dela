@@ -1,7 +1,5 @@
 import gintro/[gtk4, gobject, gio, pango, adw]
 import std/with
-# import std/sets
-# import std/json
 import Group
 import Utils
 import Types
@@ -27,6 +25,8 @@ proc createPage*(pageName: string = "main", loadedGroups: seq[GroupSave] = @[]):
   addNewGroupBtn.connect("clicked", addGroupBtnClicked, (page, entryGroupName))
   entryGroupName.connect("activate", addGroupEntryActivated, (page, entryGroupName))
 
+  entryGroupName.hexpand = true
+
   box.homogeneous = true
 
   with group:
@@ -34,12 +34,13 @@ proc createPage*(pageName: string = "main", loadedGroups: seq[GroupSave] = @[]):
 
   with rowAddGroup:
     child = box
-    # activatableWidget = addNewGroupBtn
 
   with page:
     name = "1"
     iconName = "emblem-flag-purple-symbolic"
     title = pageName
+    hexpand=true
+    vexpand=true
     add group
 
   for loadedGroup in loadedGroups: 

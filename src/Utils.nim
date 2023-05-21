@@ -34,15 +34,15 @@ func setWidgetToEnd*(widget: Widget) =
   with widget: 
     halign = Align.end
     valign = Align.center
-    marginStart = 10
+    # marginStart = 10
     marginEnd = 10
 
 func setWidgetToStart*(widget: Widget) = 
   with widget: 
-    halign = Align.start
+    halign = Align.center
     valign = Align.center
     marginStart = 10
-    marginEnd = 10
+    # marginEnd = 10
 
 proc createBoxWithEntryAndBtn*(entry: Entry, addBtn: Button): Box = 
   let box = newBox(Orientation.horizontal, 5)

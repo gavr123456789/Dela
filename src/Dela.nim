@@ -14,6 +14,7 @@ proc windowOnClose(self: adw.ApplicationWindow, tabView: TabView): bool =
 
 
 proc revealSideBarArchive(toggleButton: ToggleButton, reveal: Revealer) = 
+  reveal.visible = not reveal.visible
   reveal.revealChild = toggleButton.active
 
 proc activate(app: gtk4.Application) =
@@ -30,7 +31,7 @@ proc activate(app: gtk4.Application) =
     hboxSidebar = newBox(Orientation.horizontal, 0)
     reveal = newRevealer()
     archiveRevealBtn = newToggleButton()
-
+  reveal.visible = false
   with archiveRevealBtn:
     addCssClass("flat")
     setIconName(SHOWSIDEBAR)
@@ -87,7 +88,7 @@ proc activate(app: gtk4.Application) =
   with window:
     content = mainBox
     title = ""
-    defaultSize = (100, 300)
+    defaultSize = (300, 360)
     show
 
 proc main() =
