@@ -134,7 +134,13 @@ proc createTaskRow*(title: string, group: Group, taskSave: TaskSave = TaskSave()
     doneDeleteEditBox = newBox(Orientation.horizontal, 0)
     editNameBtn = createRevealerWithEntry(row)
 
-  textView.wrapMode = gtk4.WrapMode.word
+  with textView:
+    wrapMode = gtk4.WrapMode.word
+    marginEnd = 5
+    marginStart = 5
+    marginBottom = 5
+    # marginTop = 5
+
   row.playPauseBtn = playPauseBtn
   row.textView = textView
 

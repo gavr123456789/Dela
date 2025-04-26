@@ -49,6 +49,7 @@ proc addRevealerWithEntryToHeaderBar*(header: adw.HeaderBar, tabView: TabView) =
   
   
   revealBtnSetTabName.connect("clicked", openFileEntry, (newTabNameReveal, tabNameEntry)) # tabNameEntry
+  revealBtnSetTabName.marginStart=10
 
   tabNameEntry.hexpand = true
   tabNameEntry.connect("activate", createTab, (newTabNameReveal, tabView))

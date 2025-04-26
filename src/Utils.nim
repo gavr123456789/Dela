@@ -55,19 +55,19 @@ proc createBoxWithEntryAndBtn*(entry: Entry, addBtn: Button): Box =
 
   result = box
 
-proc createBoxWithEntryAndBtns*(entry: Entry, addBtn, delGroupBtn: Button): Box = 
-  let box = newBox(Orientation.horizontal, 5)
-  with box: 
-    append addBtn
-    append entry
-    append delGroupBtn
+# proc createBoxWithEntryAndBtns*(entry: Entry, addBtn, delGroupBtn: Button): Box = 
+#   let box = newBox(Orientation.horizontal, 5)
+#   with box: 
+#     append addBtn
+#     append entry
+#     append delGroupBtn
   
-  entry.hexpand = true
-  entry.setWidgetToStart()
-  addBtn.setWidgetToStart()
-  delGroupBtn.setWidgetToEnd()
+#   entry.hexpand = true
+#   entry.setWidgetToStart()
+#   addBtn.setWidgetToStart()
+#   delGroupBtn.setWidgetToEnd()
 
-  result = box
+#   result = box
   
 
 type 

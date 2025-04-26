@@ -31,12 +31,14 @@ proc activate(app: gtk4.Application) =
     hboxSidebar = newBox(Orientation.horizontal, 0)
     reveal = newRevealer()
     archiveRevealBtn = newToggleButton()
-  reveal.visible = false
   with archiveRevealBtn:
     addCssClass("flat")
     setIconName(SHOWSIDEBAR)
     connect("toggled", revealSideBarArchive, reveal)
   
+  reveal.visible = false
+
+
   for loadedPage in loadedPages:
     if loadedPage.pageName == "archive":
       let 
