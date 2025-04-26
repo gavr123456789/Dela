@@ -1,0 +1,58 @@
+using Gtk 4.0;
+using Adw 1;
+
+Adw.Window MainWindow {
+  default-height: 600;
+  default-width: 800;
+  title: _("Tab View Demo");
+
+  Adw.TabOverview overview {
+    enable-new-tab: true;
+    view: tab_view;
+
+    Box {
+      orientation: vertical;
+
+      Adw.HeaderBar {
+        Button button_new_tab {
+          icon-name: "tab-new-symbolic";
+        }
+
+        Button button_overview {
+          icon-name: "view-grid-symbolic";
+        }
+      }
+
+      Adw.TabBar {
+        view: tab_view;
+      }
+
+      Adw.TabView tab_view {
+        Adw.TabPage main_tab_page {
+          title: _("Main Page");
+
+          child: Adw.StatusPage {
+            hexpand: true;
+            vexpand: true;
+            title: _("Tab View");
+            description: _("A dynamic tabbed container");
+
+     
+            Adw.PreferencesPage {
+              Adw.PreferencesGroup {
+                description: "PreferenceGroup 1";
+                
+                Adw.ActionRow {
+                  subtitle: "qwf";
+                  
+                }
+              }
+            }
+              
+      
+          };
+        }
+      }
+    }
+  }
+}
